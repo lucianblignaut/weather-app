@@ -23,7 +23,7 @@
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/lucianblignaut/angular-weather-app.git
+git clone https://github.com/lucianblignaut/weather-app.git
 cd angular-weather-app
 ```
 
