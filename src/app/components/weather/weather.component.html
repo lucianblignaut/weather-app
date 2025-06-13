@@ -1,0 +1,119 @@
+<div class="w-full h-full flex items-center justify-center">
+  <div class="p-4 max-w-md mx-auto">
+    <!-- Search Input Start -->
+    <div class="w-full max-w-sm min-w-[200px]">
+      <div class="relative flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+          class="absolute w-5 h-5 top-2.5 left-2.5 text-slate-600">
+          <path fill-rule="evenodd"
+            d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z"
+            clip-rule="evenodd" />
+        </svg>
+        <input type="text"
+          class="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pl-10 pr-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+          placeholder="City names" [(ngModel)]="query" />
+
+        <button
+          class="rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2 cursor-pointer"
+          type="button" (click)="search()" [disabled]="query.length === 0">
+          Search
+        </button>
+      </div>
+    </div>
+    <!-- Search Input End -->
+    @if(loadingWeather()) {
+    <app-spinner></app-spinner>
+    } @if(error()) {
+    <div role="alert" class="mt-3 relative flex w-full p-3 text-sm text-white bg-red-500 rounded-md" id="alert">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="w-5 h-5 mr-2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5" />
+      </svg>
+
+      An error occured. {{ error() }}
+    </div>
+    }
+    @let w = weather();
+    @if(w && !loadingWeather()) {
+    <div
+      class="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 hover:border-slate-300 hover:shadow-md rounded-lg transition-all cursor-pointer w-96">
+      <div class="p-4">
+        <h5 class="mb-2 text-slate-800 text-xl font-bold">
+          {{ w.name }}, {{ w.sys.country }}
+        </h5>
+        <div class="grid grid-cols-2 grid-rows-1 gap-2">
+          <div class="col-start-2">
+            <div class="bg-white w-full rounded-lg border-slate-100 border p-1">
+              <div class="flex">
+                <img class="my-2" [src]="
+                    'https://openweathermap.org/img/wn/' +
+                    w.weather[0].icon +
+                    '@2x.png'
+                  " alt="weather icon" />
+                <h1 class="font-bold text-2xl m-3 text-gray-400">
+                  {{ formatNumber(w.main.temp) }}°
+                </h1>
+              </div>
+              <h1 class="mx-3 text-lg font-bold text-slate-900">
+                {{ w.weather[0].main }}
+              </h1>
+              <p class="mx-3 text-slate-400 mb-2">
+                {{ w.weather[0].description }}
+              </p>
+            </div>
+          </div>
+          <div class="col-start-1 col-span-1 row-start-1">
+            <div class="bg-white w-full h-full rounded-lg p-1 flex-col flex gap-2 flex-1">
+              <p class="text-gray-400">
+                Humidity
+                <span class="text-slate-900 font-medium">{{ w.main.humidity }}%</span>
+              </p>
+              <p class="text-gray-400">
+                Feels like
+                <span class="text-slate-900 font-medium">{{ formatNumber(w.main.feels_like) }}°</span>
+              </p>
+              <p class="text-gray-400">
+                Winds
+                <span class="text-slate-900 font-medium">{{ formatNumber(w.wind.speed) }} m/s &#x40;
+                  {{ w.wind.deg }}°</span>
+              </p>
+              <p class="text-gray-400">
+                Pressure
+                <span class="text-slate-900 font-medium">{{ w.main.pressure }} hPa</span>
+              </p>
+              <p class="text-gray-400">
+                Visibility
+                <span class="text-slate-900 font-medium">{{ w.visibility / 1000 }}km</span>
+              </p>
+              <p class="text-gray-400">
+                Cloud cover
+                <span class="text-slate-900 font-medium">{{ w.clouds.all }}%</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+    <div class="inline-flex items-center mt-5">
+      <label class="flex items-center cursor-pointer relative" for="check-2">
+        <input type="checkbox" checked [(ngModel)]="badNetwork"
+          class="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800"
+          id="check-2" />
+        <span
+          class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"
+            stroke="currentColor" stroke-width="1">
+            <path fill-rule="evenodd"
+              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+              clip-rule="evenodd"></path>
+          </svg>
+        </span>
+      </label>
+      <label class="cursor-pointer ml-2 text-slate-600 text-sm" for="check-2">
+        Test bad network
+      </label>
+    </div>
+  </div>
+</div>
