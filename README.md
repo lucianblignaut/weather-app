@@ -24,7 +24,7 @@
 
 ```bash
 git clone https://github.com/lucianblignaut/weather-app.git
-cd angular-weather-app
+cd weather-app
 ```
 
 ### 2. Install dependencies
