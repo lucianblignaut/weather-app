@@ -1,11 +1,14 @@
 # Angular Demo Weather App
 
+## Live demo
+<https://cozy-blini-9c2659.netlify.app/>
+
 ## Technologies Used
 
 - **Angular 19** with Signals API
 - **Tailwind CSS** for styling, pure CSS can be used however, tailwind provides a vast increase in efficiency.
 - **RxJS** for reactive, declarative state management
-- **Netlify Functions** (Node.js + Express) for secure API proxy
+- **Netlify Functions** (Node.js + Express) for secure API proxy. Repository for this can be found here: <https://github.com/lucianblignaut/openweather-server>
 - **OpenWeatherMap API** (Weather data)
 
 ---
